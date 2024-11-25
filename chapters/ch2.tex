@@ -1,4 +1,6 @@
-\section{Chapter 2}
+\section{Chapter 2: Overview of Supervised Learning}
+
+\paragraph{Statistical Decision Theory}\mbox{} \\
 
 The goal is to minimize the expected prediction error:
 \begin{align*}
@@ -9,7 +11,7 @@ The goal is to minimize the expected prediction error:
 If we break down the expectation as $E_{X, Y} = E_{X} E_{Y|X=x}$ we can rewrite this as 
 \begin{align*}
   \mathrm{EPE}(f) &= \E_X \E_{Y|X = x} (Y - f(X))^2\\
-                  &= \int_X \int_{Y}[y - f(x)]^2 p(y | x)p(x) \d y \d x\\
+                  &= \int_X \int_{Y}[y - f(x)]^2 p(y | X = x)p(x) \d y \d x\\
                   &= \int_X p(x)\left(\int_Y [y - f(x)]^2 p(y | X = x)\d y \right)\d x
 \end{align*}
 We have moved the dependence on $p(x)$ outside the inner expectation. Since $f$ is unconstrained, we can solve for the optimal $f$ pointwise. That is:
@@ -18,6 +20,29 @@ We have moved the dependence on $p(x)$ outside the inner expectation. Since $f$ 
 \end{align*}
 Differentiating wrt $c$ and using the fact that
 $$
-\int_Y y p(y | X = x)\d y = \E(Y | X = x)
+\int_Y y\ p(y | X = x)\d y = \E(Y | X = x)
 $$
 gives us (2.13) in the book.
+
+Nearest-neighbor methods try to model the regression function directly by averaging predictions around the query point $x$. To drive this point home, we can show that $\mathrm{NN}(x) \to x$ as the number of training points $N \to \infty$.
+
+To sketch this proof out, assume $x_1, \ldots, x_N$ are drawn i.i.d from $X$. We want to bound $\min_i \|x - x_i\|$, but since this is a bit complicated, let's instead compute
+$$
+\probP (\|x - x_i\| \geq \epsilon, \forall i).
+$$
+for some $\epsilon > 0$.
+
+Since the $x_i$ are sampled independently, we can expand the probability as 
+$$
+\probP (\|x - x_i\| \geq \epsilon, \forall i) = \prod_{i=1}^N \probP (\|x - x_i\| \geq \epsilon).
+$$
+As the $x_i$ are also identically distributed, the product can be written as 
+$$
+\left(\probP (\|x - x_i\| \geq \epsilon)\right)^N
+$$
+which goes to $0$ as $N\to \infty$ as long as the probability is not exactly $1$. This shows that with infinite samples the Nearest-neighbor of $x$ is $x$ and so nearest neighbors yields the Bayes optimal decision boundary even with a single neighbor.
+
+However, we often do not have enough samples to use a model-free approach to regression. The second proposal is to assume the regression function is linear in its arguments:
+$$
+f(x) \approx x^T \beta
+$$
