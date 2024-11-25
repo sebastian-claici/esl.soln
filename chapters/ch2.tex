@@ -16,7 +16,7 @@ If we break down the expectation as $E_{X, Y} = E_{X} E_{Y|X=x}$ we can rewrite 
 \end{align*}
 We have moved the dependence on $p(x)$ outside the inner expectation. Since $f$ is unconstrained, we can solve for the optimal $f$ pointwise. That is:
 \begin{align*}
-  \arg\min_{f} \mathrm{EPE}(f) = \arg\min_{c} \int_Y [y - c]^2 p(y | X = x)\d y 
+  \argmin_{f} \mathrm{EPE}(f) = \argmin_{c} \int_Y [y - c]^2 p(y | X = x)\d y 
 \end{align*}
 Differentiating wrt $c$ and using the fact that
 $$
