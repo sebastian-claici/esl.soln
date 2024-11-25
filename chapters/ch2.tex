@@ -5,7 +5,7 @@
 The goal is to minimize the expected prediction error:
 \begin{align*}
   \mathrm{EPE}(f) &= \mathrm{E}\left(Y - f(X)\right)^2\\
-  &= \int [y - f(x)]^2 p(x, y) \d x \d y
+                  &= \int [y - f(x)]^2 p(x, y) \d x \d y \numberthis \label{epe} 
 \end{align*}
 
 If we break down the expectation as $E_{X, Y} = E_{X} E_{Y|X=x}$ we can rewrite this as 
@@ -38,11 +38,24 @@ $$
 $$
 As the $x_i$ are also identically distributed, the product can be written as 
 $$
-\left(\probP (\|x - x_i\| \geq \epsilon)\right)^N
+\left[\probP (\|x - x_i\| \geq \epsilon)\right]^N
 $$
 which goes to $0$ as $N\to \infty$ as long as the probability is not exactly $1$. This shows that with infinite samples the Nearest-neighbor of $x$ is $x$ and so nearest neighbors yields the Bayes optimal decision boundary even with a single neighbor.
 
 However, we often do not have enough samples to use a model-free approach to regression. The second proposal is to assume the regression function is linear in its arguments:
 $$
 f(x) \approx x^T \beta
+$$
+If we plug this for $f$ into \eqref{epe}, we get
+$$
+\int [y - x^T \beta]^2 p(x, y) \d x \d y.
+$$
+We can differentiate this wrt $\beta$\footnote{See this \href{https://www.matrixcalculus.org/}{link} for a review of matrix calculus.}
+\begin{align*}
+  \frac{\partial \mathrm{EPE}}{\partial \beta} &= 2 \int x [y - x^T \beta] p(x, y) \d x \d y\\
+                                               &= 2\left(\int x y\ p(x, y)\d x \d y - \int xx^T\beta\ p(x, y) \d x \d y\right)
+\end{align*}
+Since $\beta$ is not a random variable, we can set this to $0$ to arrive at the minimizer in (2.16) in the book:
+$$
+\beta = [\E (XX^T)]^{-1} \E (XY)
 $$
