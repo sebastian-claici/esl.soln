@@ -1,0 +1,23 @@
+\section{Chapter 2}
+
+The goal is to minimize the expected prediction error:
+\begin{align*}
+  \mathrm{EPE}(f) &= \mathrm{E}\left(Y - f(X)\right)^2\\
+  &= \int [y - f(x)]^2 p(x, y) \d x \d y
+\end{align*}
+
+If we break down the expectation as $E_{X, Y} = E_{X} E_{Y|X=x}$ we can rewrite this as 
+\begin{align*}
+  \mathrm{EPE}(f) &= \E_X \E_{Y|X = x} (Y - f(X))^2\\
+                  &= \int_X \int_{Y}[y - f(x)]^2 p(y | x)p(x) \d y \d x\\
+                  &= \int_X p(x)\left(\int_Y [y - f(x)]^2 p(y | X = x)\d y \right)\d x
+\end{align*}
+We have moved the dependence on $p(x)$ outside the inner expectation. Since $f$ is unconstrained, we can solve for the optimal $f$ pointwise. That is:
+\begin{align*}
+  \arg\min_{f} \mathrm{EPE}(f) = \arg\min_{c} \int_Y [y - c]^2 p(y | X = x)\d y 
+\end{align*}
+Differentiating wrt $c$ and using the fact that
+$$
+\int_Y y p(y | X = x)\d y = \E(Y | X = x)
+$$
+gives us (2.13) in the book.
