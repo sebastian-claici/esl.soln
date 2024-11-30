@@ -88,17 +88,65 @@ $$
 \hat{y}_0 = x_0^T \hat{\beta} = x_0^T (\beta + (X^T X)^{-1} X^T \epsilon)
 $$
 which gives
-$$
+\begin{equation}
+  \label{eqn:haty}
 \hat{y}_0 = x_0^T \beta + \sum_{i=1}^N l_i(x_0)\epsilon_i
-$$
+\end{equation}
 since $x_0^T (X^T X)^{-1} X^T \epsilon$ is a scalar and 
 $$
 (x_0^T (X^T X)^{-1} X^T)^T = X(X^T X)^{-1}x_0
 $$
 to give the expression in the book.
 
-Let's write out $\mathrm{EPE}(x_0)$:
+Let's write out $\mathrm{EPE}(x_0)$. Note that because the true data was generated from a noisy process, we have to integrate out for $y_0$ given a fixed $x_0$:
 \begin{align*}
+  \mathrm{EPE}(x_0) &= \E_{y_0 | x_0} \E_{T}[y_0 - \hat{y}_0]^2
 \end{align*}
+
+In this particular case, because $Y$ depends on $X$ stochastically, $\E_{T} = \E_{X}\E_{Y | X}$
+
+We will write out $y_0 - \hat{y}_0$ as:
+\begin{align*}
+  y_0 - \hat{y}_0 = (y_0 - x_0^T\beta) + (x_0^T\beta - \E_{T}[\hat{y}_0]) + (\E_{T}[\hat{y}_0] - \hat{y}_0)
+\end{align*}
+Let's square this, and keep in mind that $\E[\epsilon] = 0$, and $\V[\epsilon] = \sigma^2$:
+\begin{align*}
+  \E_{y_0 | x_0}\E_{T}[y_0 - \hat{y}_0]^2 =& \E_{y_0|x_0} [y_0 - x_0^T \beta]^2 + (x_0^T\beta - \E_{T}[\hat{y}_0])^2 + \E_{T}[\hat{y}_0 - \E_{T}[\hat{y}_0]]^2 +\\
+                                           &\mathrm{cross\ terms}
+\end{align*}
+For the cross terms, we notice the following:
+\begin{align*}
+  \E_{y_0 | x_0} (y_0 - x_0^T\beta) &= 0\\
+  \E_T (\E_T[\hat{y}_0] - \hat{y}_0) &= 0\\
+\end{align*}
+and
+\begin{align*}
+  (x_0^T\beta - \E_{T}[\hat{y}_0]) &= \E_{T} \left[\sum_{i=1}^N l_i(x_0) \epsilon_i \right]\\
+                                   &= \E_{X} \left[\sum_{i=1}^N l_i(x)\E_{Y | X}(\epsilon_i)\right]\\
+                                                  &= 0
+\numberthis \label{eqn:zero-bias} 
+\end{align*}
+where we have used \eqref{eqn:haty}.
+
+This gives
+\begin{align*}
+  \E_{y_0 | x_0}\E_{T}[y_0 - \hat{y}_0]^2 &= \E_{y_0|x_0} [y_0 - x_0^T \beta]^2 + (x_0^T\beta - \E_{T}[\hat{y}_0])^2 + \E_{T}[\hat{y}_0 - \E_{T}[\hat{y}_0]]^2 +\\
+                                           &= \V[y_0 | x_0] + \mathrm{Bias}^2(\hat{y}_0) + \V_T(\hat{y}_0)
+\end{align*}
+but the bias is $0$ by \eqref{eqn:zero-bias}, and $\V[y_0 | x_0] = \sigma^2$, we have:
+\begin{align*}
+  \E_{y_0 | x_0}\E_{T}[y_0 - \hat{y}_0]^2 &= \sigma^2 + \V_{T}(\hat{y}_0).
+\end{align*}
+To finish the derivation, let's write out $\V_{T}(\hat{y}_0)$. We have just proved that $\E_{T}(\hat{y}_0) = x_0^T\beta$, and so
+\begin{align*}
+  \V_{T}(\hat{y}_0) &= \E_{T}\left[x_0^T(X^T X)^{-1} X^T \epsilon\right]^2\\
+                    &= \E_{T}\left[x_0^T(X^T X)^{-1} X^T \epsilon\epsilon^T X (X^T X)^{-1} x_0\right]
+\end{align*}
+Since $\epsilon ~ N(0, \sigma^2)$, $\epsilon\epsilon^T = \sigma^2 I_N$, and we can replace above:
+\begin{align*}
+  \V_{T}(\hat{y}_0) &= \E_{T}\left[x_0^T(X^T X)^{-1} X^T X (X^T X)^{-1} x_0\right]\sigma^2\\
+                    &= \E_{T}\left[x_0^T (X^T X)^{-1} x_0\right]\sigma^2
+\end{align*}
+which is the value in the book.
 
 \subsection*{Exercises}
