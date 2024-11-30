@@ -59,3 +59,46 @@ Since $\beta$ is not a random variable, we can set this to $0$ to arrive at the 
 $$
 \beta = [\E (XX^T)]^{-1} \E (XY)
 $$
+
+\paragraph{Bias-Variance Decomposition}\mbox{} \\
+
+We can express the mean-squared error in terms of a squared bias term and a variance term. In equation (2.25) in the book, these vary w.r.t. the training set $T$. To clarify the notation a bit, 
+$x_0$ is the point $0$, $\hat{y}_0$ is the model estimate (in this case the nearest neighbor estimate), and $f(x_0)$ is the true value at $0$, but the following derivation holds generally for any model approximation $\hat{y}$ of a function $f(x)$\footnote{See, for example, the \href{https://en.wikipedia.org/wiki/Bias-variance_tradeoff}{wikipedia} page.}:
+
+\begin{align*}
+  \mathrm{MSE}(x_0) &= \E_{T}\left[f(x_0) - \hat{y}_0\right]^2\\
+                    &= \E_{T}\left[\hat{y}_0 - \E_{T}[\hat{y}_0] + \E_{T}[\hat{y}_0] - f(x_0)]\right]^2\\
+                    &= \E_{T}\left[\hat{y}_0 - \E_{T}[\hat{y}_0]\right]^2 + \left(f(x_0) - \E_{T}[\hat{y}_0]\right)^2\\
+                    &= \mathrm{Var}_{T}(\hat{y}_0) + \mathrm{Bias}^2(\hat{y}_0)
+\end{align*}
+It is a somewhat instructive exercise to figure out how to go from the second line to the third. Easiest if you recall that
+\begin{align*}
+  \E_{T}[\E_{T}[y]] &= \E_{T}[y]\\
+\E_{T}[f(x)] &= f(x)
+\end{align*}
+
+In the example in the book, the variance is consistently low, but the bias increases with dimension as the nearest point to $0$ becomes increasingly distant. 
+
+We can discuss equations (2.27) and (2.28) in the book briefly. We have
+$$
+\hat{\beta} = (X^T X)^{-1} X^T y = (X^T X)^{-1}X^T (X \beta + \epsilon) = \beta + (X^T X)^{-1} X^T \epsilon
+$$
+and thus
+$$
+\hat{y}_0 = x_0^T \hat{\beta} = x_0^T (\beta + (X^T X)^{-1} X^T \epsilon)
+$$
+which gives
+$$
+\hat{y}_0 = x_0^T \beta + \sum_{i=1}^N l_i(x_0)\epsilon_i
+$$
+since $x_0^T (X^T X)^{-1} X^T \epsilon$ is a scalar and 
+$$
+(x_0^T (X^T X)^{-1} X^T)^T = X(X^T X)^{-1}x_0
+$$
+to give the expression in the book.
+
+Let's write out $\mathrm{EPE}(x_0)$:
+\begin{align*}
+\end{align*}
+
+\subsection*{Exercises}
