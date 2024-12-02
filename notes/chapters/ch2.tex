@@ -155,7 +155,7 @@ To derive (2.28), we assume large $N$ and that $X^T X \to N\mathrm{Cov}(X)$, hen
                             &\sim \sigma^2 + \E_{x_0}\left[x_0^T \mathrm{Cov}(X)^{-1} x_0\right]\sigma^2/N
 \numberthis \label{eqn:trace} 
 \end{align*}
-Now $x_0^T \mathrm{Cov}(X)^{-1} x_0$ is a scalar, and can be written as $\mathrm{trace}[x_0^T \mathrm{Cov}(X)^{-1} x_0]$. Exploiting the cyclic properties of the trace operator:
+Now $x_0^T \mathrm{Cov}(X)^{-1} x_0$ is a scalar, and can be written as $\mathrm{trace}[x_0^T \mathrm{Cov}(X)^{-1} x_0]$. Exploiting the cyclic properties of the trace operator and its linearity (so we can move the expectation inside):
 \begin{align*}
   \E_{x_0}\mathrm{trace}[x_0^T \mathrm{Cov}(X)^{-1} x_0] &= \E_{x_0}\mathrm{trace}[\mathrm{Cov}(X)^{-1} x_0 x_0^T] \\
                                                          &= \mathrm{trace}[\mathrm{Cov}(X)^{-1} \E_{x_0}(x_0 x_0^T)] \\
