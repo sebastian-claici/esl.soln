@@ -226,12 +226,45 @@ To compute the distance to the mean is a bit more of a challenge. Recall that th
 $$
 p(\min_i \|x\|_i \leq r) = nd(1 - r^d)^{n-1} r^{d - 1}
 $$
-The mean distance then integrates this over $r\in [0, 1]$:
+The mean distance is found by integrating this over $r\in [0, 1]$:
 $$
 d_{\mathrm{mean}} = nd \int_0^1 (1 - r^d)^{n-1} r^{d - 1} \d r
 $$
 Integrating this explicitly is impossible, but we can relate it to the Beta function:
 $$
-\mathrm{B}(z_1, z_2) = \int_0^1 t^{z1 - 1} (1 - t)^{z_2 - 1}\d t
+\mathrm{B}(z_1, z_2) = \int_0^1 t^{z_1 - 1} (1 - t)^{z_2 - 1}\d t
 $$
 which can be integrated numerically and is available in most programming languages (e.g. \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html}{scipy.special.beta}).
+
+\exe{2.4. (Average projection distance)}
+The standard normal distribution is invariant to rotations, and so there is no difference between projecting on $a = x_0 / \|x_0\|$ and projecting on any of the axes. Since $\mathbf{x} \sim \mathcal{N}(0, I_p)$ is isotropic, each of the components of $\mathbf{x}$ are distributed as $\mathcal{N}(0, 1)$. Or, if you prefer a slightly different point of view, the joint distribution of $x_i \sim \mathcal{N}(0, 1)$ sampled independently is a $0$-mean, identity covariance Gaussian in $p$ dimensions.
+
+We need to prove two related facts:
+\begin{enumerate}
+  \item{$\E\left[x_i^2\right] = 1, \forall i$}
+  \item{$\E\left[\|x_0\|^2\right] = p$}
+\end{enumerate}
+The first item follows from the definition of the standard deviation of a Gaussian, but let's derive from first principles as a reminder. We want to integrate
+\begin{align*}
+  \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} x^2 e^{-\frac{x^2}{2}}\d x
+\end{align*}
+We can integrate this by parts with
+\begin{align*}
+  u &= x\\
+  v &= -e^{-\frac{x^2}{2}}\\
+  \d u &= \d x\\
+  \d v &= xe^{-\frac{x^2}{2}}\d x
+\end{align*}
+and so
+\begin{align*}
+  \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} x^2 e^{-\frac{x^2}{2}}\d x &= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} u \d v =\frac{1}{\sqrt{2\pi}} \left[uv\right]_{-\infty}^{\infty} - \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} v \d u\\
+                                                                          &= \frac{1}{\sqrt{2\pi}} \left[-xe^{-\frac{x^2}{2}}\right]_{-\infty}^{\infty} + \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} e^{-\frac{x^2}{2}}\d x
+\end{align*}
+The first summand is $0$ since the exponential dominates the linear term and both limits are $0$. The second summand is related to the Gaussian integral after the transformation $t = x / \sqrt{2}$, $\d x = \sqrt{2}\d t$ which gives
+\begin{align*}
+  \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} e^{-\frac{x^2}{2}}\d x = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} \sqrt{2} e^{-t^2}\d t = \frac{1}{\sqrt{2\pi}} \sqrt{2}\sqrt{\pi} = 1
+\end{align*}
+This proves $\E[x_i^2] = 1$. To show that the distance from any sample point to the origin is $p$, we can write out:
+$$
+\E\left[\|x_0\|^2\right] = \E\left[\sum_{i=1}^p x_i^2\right] = \sum_{i = 1}^p \E\left[x_i^2\right] = p
+$$
