@@ -168,3 +168,70 @@ Since $\mathrm{Cov}(X) = \mathrm{Cov}(x_0)$, and since each training set point i
 which when replaced in \eqref{eqn:trace} gives equation (2.28) in the book.
 
 \subsection*{Exercises}
+
+\exe{2.1. (Classifying to max)}
+The wording here is a bit confusing, but I am assuming that $\hat{y}$ is constant, and we want to show 
+$$
+\argmin_k \|\hat{y} - t_k\| = \argmax_k \hat{y}_k.
+$$
+
+To prove this, note that $\|t_k\| = 1, \forall k$, and the length of $\hat{y}$ is constant with $0 \leq \hat{y}_k \leq 1$. For this setup, we can square the cost function without affecting the optimal value. Then
+$$
+\min_k \|\hat{y} - t_k\|^2 = \min_k \langle \hat{y} - t_k, \hat{y} - t_k \rangle = \|t_k\|^2 + \|\hat{y}\|^2 + 2\min_k (-\langle \hat{y}, t_k) \rangle
+$$
+Since $\min_k (-\langle \hat{y}, t_k)\rangle = \max_k \langle \hat{y}, t_k\rangle$ and $\langle \hat{y}, t_k\rangle = \hat{y}_k$ we have
+$$
+\argmin_k \|\hat{y} - t_k\|^2 =\argmax_k \langle \hat{y}, t_k \rangle = \argmax_k \hat{y}_k.
+$$
+
+\exe{2.2. (Bayes decision boundary)}
+Computing the Bayes decision boundary only makes sense after the means of the two classes have been sampled. If we integrate out that step, the decision boundary is the diagonal through the origin that separates $[0, 1]^T$ and $[1, 0]^T$.
+
+The procedure for sampling each data point looks something like this (for the \textcolor{blue}{blue} means):
+\begin{align*}
+(\mu_1, \ldots, \mu_{10}) &\sim \mathcal{N}([1, 0]^T, I_n)\\
+\text{for i = 1..100}\\
+k &\sim \mathrm{Cat}(10, [1/10, \ldots, 1/10])\\
+x &\sim \mathcal{N}(\mu_k, I_n / 5)\\
+\text{end for}
+\end{align*}
+
+The decision boundary is where
+$$
+\probP(\textcolor{blue}{\mathrm{blue}}) \sum_{i = 1}^{10} \exp\left\{-5\|x - \textcolor{blue}{\mu_k}\|^2 / 2\right\} = \probP(\textcolor{orange}{\mathrm{orange}}) \sum_{i = 1}^{10} \exp\left\{-5\|x - \textcolor{orange}{\nu_k}\|^2 / 2\right\} 
+$$
+which can be computed easily.
+
+\exe{2.3. (Median distance in high dimensions)}
+Let $x$ be a point sampled from the unit hypersphere. The probability that $\|x\| \leq r$ is equal to the ratio between the volume of the radius $r$ hypersphere and the volume of the unit sphere. That is, the cdf of $\|x\|$ in $d$-dimensions is
+$$
+F(r) = r^d.
+$$
+
+Now let's say we sample $n$ points $x_1, x_2, \ldots, x_n$. The probability that the closest of these is distance $r$ away can be written as
+\begin{equation}
+F(\min_i \|x\|_i \leq r) = 1 - \left(1 - F(r)\right)^n = 1 - (1 - r^d)^n
+\label{eqn:hd-dist}
+\end{equation}
+since each of the $x_i$ is independent, and the event that the closest is distance $r$ away is the same as the event that all of them are at least distance $r$ away.
+
+The median is defined as the distance $r$ for which $F(\min_i \|x\|_i \leq r) = 1 / 2$. If we substitute in \eqref{eqn:hd-dist}, we have
+\begin{align*}
+  1 - (1 - r^d)^n &= \frac{1}{2}\\
+  1 - r^d &= \left(\frac{1}{2}\right)^{1 / n}\\
+  r &= \left(1 - \left(\frac{1}{2}\right)^{1 / n}\right)^{1 / d}
+\end{align*}
+
+To compute the distance to the mean is a bit more of a challenge. Recall that the pdf of a random variable is the derivative of the cdf, and so, from \eqref{eqn:hd-dist} we have
+$$
+p(\min_i \|x\|_i \leq r) = nd(1 - r^d)^{n-1} r^{d - 1}
+$$
+The mean distance then integrates this over $r\in [0, 1]$:
+$$
+d_{\mathrm{mean}} = nd \int_0^1 (1 - r^d)^{n-1} r^{d - 1} \d r
+$$
+Integrating this explicitly is impossible, but we can relate it to the Beta function:
+$$
+\mathrm{B}(z_1, z_2) = \int_0^1 t^{z1 - 1} (1 - t)^{z_2 - 1}\d t
+$$
+which can be integrated numerically and is available in most programming languages (e.g. \href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html}{scipy.special.beta}).
