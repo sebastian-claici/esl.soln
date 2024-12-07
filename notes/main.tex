@@ -27,7 +27,10 @@
 \newcommand{\probP}{\mathrm{P}}
 \renewcommand{\d}[1]{\ensuremath{\operatorname{d}\!{#1}}}
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
-\newcommand{\exe}[1]{\textbf{#1}\mbox{} \\}
+
+\setcounter{section}{1}
+\setcounter{secnumdepth}{5}
+\newcommand{\exe}[1]{\subsubsection*{#1}\addcontentsline{toc}{subsubsection}{#1}}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -38,6 +41,7 @@
 
 \begin{document}
 \maketitle
+\tableofcontents
 
 \subfile{chapters/ch2}
 

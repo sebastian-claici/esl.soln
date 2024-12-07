@@ -1,6 +1,6 @@
-\section*{Chapter 2: Overview of Supervised Learning}
+\section{Overview of Supervised Learning}
 
-\paragraph{Statistical Decision Theory}\mbox{} \\
+\subsection{Statistical Decision Theory}
 
 The goal is to minimize the expected prediction error:
 \begin{align*}
@@ -60,7 +60,7 @@ $$
 \beta = [\E (XX^T)]^{-1} \E (XY)
 $$
 
-\paragraph{Bias-Variance Decomposition}\mbox{} \\
+\subsection{Bias-Variance Decomposition}
 
 We can express the mean-squared error in terms of a squared bias term and a variance term. In equation (2.25) in the book, these vary w.r.t. the training set $T$. To clarify the notation a bit, 
 $x_0$ is the point $0$, $\hat{y}_0$ is the model estimate (in this case the nearest neighbor estimate), and $f(x_0)$ is the true value at $0$, but the following derivation holds generally for any model approximation $\hat{y}$ of a function $f(x)$\footnote{See, for example, the \href{https://en.wikipedia.org/wiki/Bias-variance_tradeoff}{wikipedia} page.}:
@@ -167,7 +167,7 @@ Since $\mathrm{Cov}(X) = \mathrm{Cov}(x_0)$, and since each training set point i
 \end{align*}
 which when replaced in \eqref{eqn:trace} gives equation (2.28) in the book.
 
-\subsection*{Exercises}
+\subsection{Exercises}
 
 \exe{2.1. (Classifying to max)}
 The wording here is a bit confusing, but I am assuming that $\hat{y}$ is constant, and we want to show 
