@@ -273,3 +273,35 @@ $$
 See main text for the derivation of the two equations.
 
 \exe{2.6. (Repeated values and weighted least squares)}
+I will introduce some notation to make life easier. Let $N_u$ be the number of unique values of $x$, $n_i$ be the number of repetitions of $x_i$, and let $y_{ij}$, $j\in \{1,\ldots,n_i\}$ represent the output values at those $x_i$. The $\mathrm{RSS}$ can be written as
+\begin{align*}
+  \mathrm{RSS}(\theta) = \sum_{i=1}^{N_u}\sum_{j=1}^{n_i} \left(y_{ij} - f_\theta(x_i)\right)^2
+\end{align*}
+We want to show that the minimizer here is equivalent to the minimizer of a weighted least squares problem:
+\begin{align*}
+  \mathrm{RSS}(\theta) = \sum_{i=1}^{N_u} \left(\bar{y}_{i} - w_i f_\theta(x_i)\right)^2.
+\end{align*}
+The problem setup inclines us towards the following definition of $\bar{y}_i$:
+\begin{align*}
+  \bar{y}_i = \frac{1}{n_i} \sum_{j=1}^{n_i} y_{ij}.
+\end{align*}
+
+Let's expand the quadratic of the original $\mathrm{RSS}$, and simplify:
+\begin{align*}
+  \mathrm{RSS}(\theta) &= \sum_{i=1}^{N_u}\sum_{j=1}^{n_i} \left(y_{ij}^2 + f_\theta(x_i)^2 - 2 y_{ij} f_\theta(x_i)\right) \\
+                  &= \sum_{i=1}^{N_u} n_i f_\theta(x_i)^2 - 2\sum_{i=1}^{N_u}n_i f_\theta(x_i) \frac{1}{n_i}\sum_{j=1}^{n_i}y_{ij} +\sum_{i=1}^{N_u} \sum_{j=1}^{n_i} y^2_{ij}\\
+\end{align*}
+
+If we collect the first two terms, we have
+\begin{align*}
+  \mathrm{RSS}(\theta) &= n_i\sum_{i=1}^{N_u}\left( f_\theta(x_i)^2 - 2 f_\theta(x_i) \bar{y}_i\right) +\sum_{i=1}^{N_u} \sum_{j=1}^{n_i} y^2_{ij}\\
+\end{align*}
+and to complete the square, we add and subtract $\sum_{i=1}^{N_u} \hat{y}_i^2$:
+\begin{align*}
+  \mathrm{RSS}(\theta) &= n_i\sum_{i=1}^{N_u}\left( f_\theta(x_i) - \bar{y}_i\right)^2 +\sum_{i=1}^{N_u} \sum_{j=1}^{n_i} y^2_{ij} - \sum_{i=1}^{N_u}\bar{y}_i^2\\
+\end{align*}
+Since the last two terms in this equation do not contain $\theta$, the overall minimizer is independent of those terms, and we conclude
+$$
+\argmin_{\theta} \mathrm{RSS}(\theta) = \argmin_{\theta} \sum_{i=1}^{N_u} n_i (f_\theta(x_i) - \bar{y}_i)^2
+$$
+This is a \emph{weighted least squares} problem because each input sample $x_i$ is fit to the average output value at that sample, and we weight residual errors by how often $x_i$ appears. It is a reduced problem because $N_u < N$, the original number of samples.
