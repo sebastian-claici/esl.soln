@@ -1,9 +1,9 @@
 import numpy as np
 
-
 # generate means
 blu_means = np.random.multivariate_normal(np.array([1, 0]), np.eye(2), size=10)
 org_means = np.random.multivariate_normal(np.array([0, 1]), np.eye(2), size=10)
+
 
 # generate samples
 def generate(mus, n_samples=100):
@@ -12,27 +12,31 @@ def generate(mus, n_samples=100):
         # sample mean at random
         idx = np.random.choice(mus.shape[0])
         # sample from Gaussian
-        samples.append(np.random.multivariate_normal(mus[idx], np.eye(2) / 5.))
-    
+        samples.append(np.random.multivariate_normal(mus[idx], np.eye(2) / 5.0))
+
     return samples
+
 
 def pdf(x, mu, sigma):
     # only care about unnormalized PDF since the covariances are identical
     return np.exp(-np.dot(x - mu, x - mu) / (2 * sigma))
 
+
 def pdf_blue(x, y):
-    sigma = 1. / 5.
+    sigma = 1.0 / 5.0
     val = 0.0
     for mu in blu_means:
-        val += pdf((x, y), mu, sigma) 
-    return 1. / 10. * val
+        val += pdf((x, y), mu, sigma)
+    return 1.0 / 10.0 * val
+
 
 def pdf_orange(x, y):
-    sigma = 1. / 5.
+    sigma = 1.0 / 5.0
     val = 0.0
     for mu in org_means:
-        val += pdf((x, y), mu, sigma) 
-    return 1. / 10. * val
+        val += pdf((x, y), mu, sigma)
+    return 1.0 / 10.0 * val
+
 
 # sample from the distributions
 blue_samples = np.array(generate(blu_means, 100))
@@ -47,15 +51,6 @@ xs, ys = np.meshgrid(np.linspace(min_x, max_x, 500), np.linspace(min_y, max_y, 5
 grid_blue = vpdf_blue(xs, ys)
 grid_orange = vpdf_orange(xs, ys)
 
-# Bayes boundary 
+# Bayes boundary
 bdry = np.where(grid_blue > grid_orange, 0, 2)
 bdry[np.abs(grid_blue - grid_orange) < 1e-6] = 1
-
-# plot everything
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(12, 9))
-fig, ax = plt.subplots()
-plt.contourf(xs, ys, bdry, alpha=0.1)
-plt.scatter(blue_samples[:, 0], blue_samples[:, 1], marker='o', edgecolors='b')
-plt.scatter(orange_samples[:, 0], orange_samples[:, 1], marker='o', edgecolors='orange')
