@@ -305,3 +305,5 @@ $$
 \argmin_{\theta} \mathrm{RSS}(\theta) = \argmin_{\theta} \sum_{i=1}^{N_u} n_i (f_\theta(x_i) - \bar{y}_i)^2
 $$
 This is a \emph{weighted least squares} problem because each input sample $x_i$ is fit to the average output value at that sample, and we weight residual errors by how often $x_i$ appears. It is a reduced problem because $N_u < N$, the original number of samples.
+
+\exe{2.7. (Bias-variance decompositions)}

@@ -308,3 +308,5 @@ TSWLatexianTemp*
 # python stuff
 poetry.lock
 __pycache__
+
+data/
